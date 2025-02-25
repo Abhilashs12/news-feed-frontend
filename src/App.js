@@ -1,22 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
+  const [news, setNews] = useState([]);
+
+  useEffect(() => {
+    fetch("https://news-feed-backend.onrender.com/trending-news") // Update with your actual API endpoint
+      .then((response) => response.json())
+      .then((data) => setNews(data))
+      .catch((error) => console.error("Error fetching news:", error));
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Real-Time News Feed</h1>
+        {news.length > 0 ? (
+          <ul>
+            {news.map((article, index) => (
+              <li key={index}>{article.title}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>Loading news...</p>
+        )}
       </header>
     </div>
   );
